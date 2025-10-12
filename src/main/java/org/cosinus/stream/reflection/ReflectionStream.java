@@ -20,8 +20,17 @@ package org.cosinus.stream.reflection;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+/**
+ * Reflection streams utils.
+ */
 public final class ReflectionStream {
 
+    /**
+     * Get the stream of ancestor classes and interfaces of the given object.
+     *
+     * @param object the object to analyze
+     * @return the ancestors stream
+     */
     public static Stream<ClassDescriptor<?>> ancestorStream(Object object) {
         return StreamSupport.stream(new AncestorClassesSpliterator(object), false);
     }

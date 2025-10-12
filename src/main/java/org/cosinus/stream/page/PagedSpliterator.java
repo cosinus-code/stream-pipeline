@@ -25,6 +25,12 @@ import java.util.function.Consumer;
 
 import static java.lang.Long.MAX_VALUE;
 
+/**
+ * The spliterator implementation for streaming items in pages.
+ * Useful when the source of items is a paged API.
+ *
+ * @param <T> the type streamed items
+ */
 public class PagedSpliterator<T> extends AbstractSpliterator<T> {
 
     private static final int DEFAULT_PAGE_SIZE = 200;
@@ -37,10 +43,21 @@ public class PagedSpliterator<T> extends AbstractSpliterator<T> {
 
     private int page = 1;
 
+    /**
+     * Instantiates a new PagedSpliterator.
+     *
+     * @param pageSupplier the items page supplier
+     */
     public PagedSpliterator(final PageSupplier<T> pageSupplier) {
         this(pageSupplier, DEFAULT_PAGE_SIZE);
     }
 
+    /**
+     * Instantiates a new PagedSpliterator.
+     *
+     * @param pageSupplier the items page supplier
+     * @param pageSize     the page size
+     */
     public PagedSpliterator(final PageSupplier<T> pageSupplier, final int pageSize) {
         super(MAX_VALUE, ORDERED | NONNULL);
 
@@ -52,7 +69,7 @@ public class PagedSpliterator<T> extends AbstractSpliterator<T> {
     @Override
     public boolean tryAdvance(final Consumer<? super T> action) {
         if (activities.isEmpty()) {
-            activities.addAll(getActivities());
+            activities.addAll(getNextPage());
         }
 
         if (activities.isEmpty()) {
@@ -63,10 +80,20 @@ public class PagedSpliterator<T> extends AbstractSpliterator<T> {
         return true;
     }
 
-    protected List<T> getActivities() {
-        return pageSupplier.call(getPageSize(), page++);
+    /**
+     * Gets the next page of items.
+     *
+     * @return the next page of items
+     */
+    protected List<T> getNextPage() {
+        return pageSupplier.getPage(getPageSize(), page++);
     }
 
+    /**
+     * Gets the page size.
+     *
+     * @return the page size
+     */
     protected int getPageSize() {
         return pageSize;
     }

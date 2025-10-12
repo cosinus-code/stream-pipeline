@@ -16,9 +16,6 @@
 
 package org.cosinus.stream.consumer;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.function.Consumer;
@@ -27,16 +24,35 @@ import java.util.stream.Stream;
 
 import static java.util.Optional.ofNullable;
 
+/**
+ * Stream consumer.
+ *
+ * @param <T> the type of streamed items
+ */
 public interface StreamConsumer<T> extends Consumer<T>, AutoCloseable {
 
-    Logger LOG = LogManager.getLogger(StreamConsumer.class);
-
+    /**
+     * The default maximum number of retry attempts when a retry is requested.
+     */
     int RETRY_MAX_ATTEMPTS = 1;
 
+    /**
+     * Consume the stream items.
+     *
+     * @param stream the stream to consume
+     */
     default void consume(Stream<T> stream) {
         consume(stream, null, null, null);
     }
 
+    /**
+     * Consume the stream items.
+     *
+     * @param stream the stream to consume
+     * @param retry  the retry true is a retry should be attempted on failure
+     * @param before the before an action to perform before consuming an item
+     * @param after  the after an action to perform after consuming an item
+     */
     default void consume(Stream<T> stream, Supplier<Boolean> retry, Consumer<T> before, Consumer<T> after) {
         stream.forEach(data -> {
             apply(data, before);
@@ -50,7 +66,6 @@ public interface StreamConsumer<T> extends Consumer<T>, AutoCloseable {
         try {
             accept(data);
         } catch (UncheckedIOException ex) {
-            LOG.error("Error while consuming data: {}", data, ex);
             if (retryCount < retryMaxAttempts && retry != null && retry.get()) {
                 acceptWithRetry(data, retry, ++retryCount, retryMaxAttempts);
             } else {
@@ -63,6 +78,11 @@ public interface StreamConsumer<T> extends Consumer<T>, AutoCloseable {
         ofNullable(consumer).ifPresent(c -> c.accept(data));
     }
 
+    /**
+     * Gets retry max attempts.
+     *
+     * @return the retry max attempts
+     */
     default int getRetryMaxAttempts() {
         return RETRY_MAX_ATTEMPTS;
     }
@@ -71,6 +91,11 @@ public interface StreamConsumer<T> extends Consumer<T>, AutoCloseable {
     default void close() throws IOException {
     }
 
+    /**
+     * After close action.
+     *
+     * @param failed true if the consumption failed
+     */
     default void afterClose(boolean failed) {
     }
 }

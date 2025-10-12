@@ -34,6 +34,11 @@ public class StreamDelegate<T> implements Stream<T> {
 
     private final Stream<T> delegate;
 
+    /**
+     * Instantiates a new Stream delegate.
+     *
+     * @param delegate the delegate
+     */
     public StreamDelegate(Stream<T> delegate) {
         this.delegate = delegate;
     }

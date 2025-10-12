@@ -28,10 +28,21 @@ import java.util.zip.Checksum;
 
 import static java.util.Optional.ofNullable;
 
+/**
+ * The implementation of {@link StreamConsumer} to consume binary data by writing to an {@link OutputStream}.
+ */
 public class BinaryStreamConsumer implements StreamConsumer<byte[]> {
 
+    /**
+     * The output stream to write to.
+     */
     protected final OutputStream outputStream;
 
+    /**
+     * Instantiates a new BinaryStreamConsumer.
+     *
+     * @param outputStream the output stream
+     */
     public BinaryStreamConsumer(OutputStream outputStream) {
         this.outputStream = outputStream;
     }
@@ -47,6 +58,11 @@ public class BinaryStreamConsumer implements StreamConsumer<byte[]> {
         }
     }
 
+    /**
+     * Compute checksum of the output data, if the output stream allows it.
+     *
+     * @return the computed checksum, or empty if not available
+     */
     public Optional<String> checksum() {
         return ofNullable(outputStream)
             .filter(output -> CheckedOutputStream.class.isAssignableFrom(output.getClass()))

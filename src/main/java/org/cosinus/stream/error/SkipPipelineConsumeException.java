@@ -19,15 +19,32 @@ package org.cosinus.stream.error;
 
 import lombok.Getter;
 
+/**
+ * The exception thrown when pipeline consumption is skipped.
+ */
 @Getter
 public class SkipPipelineConsumeException extends RuntimeException {
 
+    /**
+     * The size that has been skipped.
+     */
     private final long skippedSize;
 
+    /**
+     * Instantiates a new SkipPipelineConsumeException.
+     *
+     * @param skippedSize the skipped size
+     */
     public SkipPipelineConsumeException(long skippedSize) {
         this.skippedSize = skippedSize;
     }
 
+    /**
+     * Instantiates a new SkipPipelineConsumeException.
+     *
+     * @param skippedSize the skipped size
+     * @param message     the error message
+     */
     public SkipPipelineConsumeException(long skippedSize, String message) {
         super(message);
         this.skippedSize = skippedSize;

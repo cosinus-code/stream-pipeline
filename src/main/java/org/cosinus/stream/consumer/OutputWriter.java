@@ -18,9 +18,25 @@ package org.cosinus.stream.consumer;
 import java.io.IOException;
 import java.io.OutputStream;
 
+/**
+ * The interface Output writer.
+ *
+ * @param <O> the type of the output stream to write to
+ */
 public interface OutputWriter<O extends OutputStream> {
 
+    /**
+     * Write to the output stream.
+     *
+     * @param output the output stream to write to
+     * @throws IOException the io exception
+     */
     void write(O output) throws IOException;
 
+    /**
+     * Get the size of writing chunks.
+     *
+     * @return the size of writing chunks
+     */
     long size();
 }

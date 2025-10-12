@@ -17,8 +17,17 @@ package org.cosinus.stream.consumer;
 
 import java.io.File;
 
+/**
+ * The interface for strategies of creating a temporary file for a given file.
+ */
 @FunctionalInterface
 public interface TemporaryFileStrategy {
 
+    /**
+     * Gets the temporary file for a given file.
+     *
+     * @param file the initial file
+     * @return the temporary file
+     */
     File getFile(File file);
 }

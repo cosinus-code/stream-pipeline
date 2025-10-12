@@ -16,24 +16,73 @@
 
 package org.cosinus.stream;
 
+import org.cosinus.stream.page.PageSupplier;
+import org.cosinus.stream.page.PagedSpliterator;
+
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import static java.util.Collections.reverse;
+import static java.util.stream.Collectors.toList;
+
 /**
- * Streams generics
+ * Streams utils
  */
 public final class Streams {
 
+    /**
+     * Create a stream from an iterator.
+     *
+     * @param <T>            the type of elements in the stream
+     * @param sourceIterator the source iterator
+     * @return the stream
+     */
     public static <T> Stream<T> stream(Iterator<T> sourceIterator) {
         return stream(sourceIterator, false);
     }
 
+    /**
+     * Create a stream from an iterator.
+     *
+     * @param <T>            the type of elements in the stream
+     * @param sourceIterator the source iterator
+     * @param parallel       true if the stream is parallel
+     * @return the stream
+     */
     public static <T> Stream<T> stream(Iterator<T> sourceIterator, boolean parallel) {
         Iterable<T> iterable = () -> sourceIterator;
         return StreamSupport.stream(iterable.spliterator(), parallel);
     }
 
+    /**
+     * Get the pages stream using a given page supplier.
+     *
+     * @param <T>          the type of the streamed items
+     * @param pageSupplier the page supplier
+     * @return the paged stream
+     */
+    public static <T> Stream<T> pagedStream(PageSupplier<T> pageSupplier) {
+        return StreamSupport.stream(new PagedSpliterator<>(pageSupplier), false);
+    }
+
+    /**
+     * Reverse a stream.
+     *
+     * @param <T>    the type parameter
+     * @param stream the stream to reverse
+     * @return the stream the reversed stream
+     */
+    public static <T> Stream<T> reverseStream(Stream<T> stream) {
+        List<T> list = stream.collect(toList());
+        reverse(list);
+        return list.stream();
+    }
+
+    /**
+     * Private constructor
+     */
     private Streams() {
     }
 }

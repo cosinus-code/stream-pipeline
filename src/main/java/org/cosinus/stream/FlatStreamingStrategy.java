@@ -15,10 +15,26 @@
  */
 package org.cosinus.stream;
 
-public enum FlatStreamingStrategy
-{
+import lombok.Getter;
+
+/**
+ * The flat streaming strategy values
+ */
+@Getter
+public enum FlatStreamingStrategy {
+    /**
+     * In depth streaming strategy
+     */
     IN_DEPTH(true, true),
+
+    /**
+     * Bottom to top streaming strategy
+     */
     LEVEL_BOTTOM_UP(false, true),
+
+    /**
+     * Top to bottom streaming strategy
+     */
     LEVEL_UP_BOTTOM(true, false);
 
     private final boolean parentFirst;
@@ -30,13 +46,4 @@ public enum FlatStreamingStrategy
         this.depthFirst = depthFirst;
     }
 
-    public boolean isParentFirst()
-    {
-        return parentFirst;
-    }
-
-    public boolean isDepthFirst()
-    {
-        return depthFirst;
-    }
 }

@@ -23,45 +23,89 @@ import java.util.stream.Stream;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.StreamSupport.stream;
 
+/**
+ * The stream of text lines using a text reader.
+ */
 public class TextStream extends StreamDelegate<String> {
+
     private final BufferedReader reader;
 
-    public TextStream(Stream<String> delegate, final BufferedReader reader)
-    {
+    /**
+     * Instantiates a new TextStream.
+     *
+     * @param delegate the delegate
+     * @param reader   the reader
+     */
+    public TextStream(final Stream<String> delegate, final BufferedReader reader) {
         super(delegate);
         this.reader = reader;
     }
 
+    /**
+     * Get the text stream corresponding to the given input stream.
+     *
+     * @param inputStream the input stream
+     * @return the text stream
+     */
     public static Stream<String> of(final InputStream inputStream) {
         return of(new InputStreamReader(inputStream));
     }
 
+    /**
+     * Get the text stream corresponding to the given text reader.
+     *
+     * @param reader the reader
+     * @return the text stream
+     */
     public static Stream<String> of(final InputStreamReader reader) {
         return of(new BufferedReader(reader));
     }
 
+    /**
+     * Get the text stream corresponding to the given text reader.
+     *
+     * @param reader the reader
+     * @return the text stream
+     */
     public static Stream<String> of(final BufferedReader reader) {
         requireNonNull(reader);
         TextSpliterator spliterator = new TextSpliterator(reader);
         return new TextStream(stream(spliterator, false), reader);
     }
 
+    /**
+     * Get the text stream corresponding to the given input stream.
+     *
+     * @param inputStream the input stream
+     * @return the text stream
+     */
     public static Stream<String> lines(final InputStream inputStream) {
         return of(new InputStreamReader(inputStream));
     }
 
+    /**
+     * Get the text stream corresponding to the given text reader.
+     *
+     * @param reader the reader
+     * @return the text stream
+     */
     public static Stream<String> lines(final InputStreamReader reader) {
         return of(new BufferedReader(reader));
     }
 
+    /**
+     * Get the text stream corresponding to the given text reader.
+     *
+     * @param reader the reader
+     * @return the text stream
+     */
     public static Stream<String> lines(final BufferedReader reader) {
         requireNonNull(reader);
         return reader.lines();
     }
 
     @Override
-    public void close()
-    {
+    public void close() {
         super.close();
 
         try {

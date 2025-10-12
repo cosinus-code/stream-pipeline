@@ -23,6 +23,11 @@ import lombok.Setter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+/**
+ * The class descriptor.
+ *
+ * @param <T> the type od class
+ */
 @Getter
 @Setter
 public class ClassDescriptor<T> {
@@ -33,16 +38,32 @@ public class ClassDescriptor<T> {
 
     private Class<?>[] genericClasses;
 
+    /**
+     * Instantiates a new ClassDescriptor.
+     *
+     * @param mainClass the main class
+     */
     public ClassDescriptor(final Class<T> mainClass) {
         this.mainClass = mainClass;
         this.type = mainClass;
     }
 
+    /**
+     * Instantiates a new ClassDescriptor.
+     *
+     * @param mainClass the main class
+     * @param type      the type
+     */
     public ClassDescriptor(final Class<T> mainClass, final Type type) {
         this.mainClass = mainClass;
         this.type = type;
     }
 
+    /**
+     * Ask if class is parametrized.
+     *
+     * @return true if class is parametrized
+     */
     public boolean isParametrized() {
         return type instanceof ParameterizedType;
     }

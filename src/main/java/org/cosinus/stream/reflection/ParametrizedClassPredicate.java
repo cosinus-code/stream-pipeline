@@ -21,6 +21,11 @@ import java.util.function.Predicate;
 
 import static java.util.Optional.ofNullable;
 
+/**
+ * The {@link Predicate} to check if a {@link ClassDescriptor} is a parametrized class of a given class.
+ *
+ * @param parametrizedClass the parametrized class
+ */
 public record ParametrizedClassPredicate(Class<?> parametrizedClass) implements Predicate<ClassDescriptor<?>> {
 
     @Override
@@ -32,14 +37,34 @@ public record ParametrizedClassPredicate(Class<?> parametrizedClass) implements 
             .isPresent();
     }
 
+    /**
+     * Get a predicate to check if a {@link ClassDescriptor} is a parametrized class
+     * of a given class with given generics classes.
+     *
+     * @param genericClasses the classes of generics
+     * @return the predicate
+     */
     public ParametrizedTypeWithGenericsPredicate withGenerics(final Class<?>... genericClasses) {
         return new ParametrizedTypeWithGenericsPredicate(parametrizedClass, false, genericClasses);
     }
 
+    /**
+     * Get a predicate to check if a {@link ClassDescriptor} is a parametrized class
+     * of a given class with the generics extending the given classes.
+     *
+     * @param genericClasses the classes of generics
+     * @return the predicate
+     */
     public ParametrizedTypeWithGenericsPredicate withGenericsExtending(final Class<?>... genericClasses) {
         return new ParametrizedTypeWithGenericsPredicate(parametrizedClass, true, genericClasses);
     }
 
+    /**
+     * Get the predicate to check if a {@link ClassDescriptor} is a parametrized class
+     *
+     * @param parametrizedClass the parametrized class
+     * @return the predicate
+     */
     public static ParametrizedClassPredicate isParametrizedClass(Class<?> parametrizedClass) {
         return new ParametrizedClassPredicate(parametrizedClass);
     }

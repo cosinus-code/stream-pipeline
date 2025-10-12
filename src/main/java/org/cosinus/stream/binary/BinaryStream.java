@@ -38,6 +38,12 @@ public class BinaryStream extends StreamDelegate<byte[]> {
 
     private final InputStream inputStream;
 
+    /**
+     * Instantiates a new Binary stream.
+     *
+     * @param delegate    the delegate
+     * @param inputStream the input stream
+     */
     public BinaryStream(Stream<byte[]> delegate,
                         InputStream inputStream) {
         super(delegate);

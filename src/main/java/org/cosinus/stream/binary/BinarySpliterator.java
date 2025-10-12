@@ -40,6 +40,12 @@ public class BinarySpliterator extends AbstractSpliterator<byte[]> {
 
     private final byte[] buffer;
 
+    /**
+     * Instantiates a new Binary spliterator.
+     *
+     * @param inputStream the input stream
+     * @param bufferSize  the buffer size
+     */
     public BinarySpliterator(InputStream inputStream, int bufferSize) {
         super(MAX_VALUE, ORDERED | NONNULL);
         this.inputStream = inputStream;

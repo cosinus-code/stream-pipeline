@@ -25,12 +25,14 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.lang.Long.MAX_VALUE;
-import static java.util.stream.Collectors.toList;
 import static org.cosinus.stream.reflection.ParametrizedClassPredicate.isParametrizedClass;
 import static org.cosinus.stream.reflection.ReflectionStream.ancestorStream;
+import static org.cosinus.stream.Streams.reverseStream;
 
 /**
  * Spliterator for flattening a tree of streams
+ *
+ * @param <S> the type parameter
  */
 public class FlatStreamingSpliterator<S extends StreamSupplier<?>> extends AbstractSpliterator<S> {
 
@@ -42,12 +44,25 @@ public class FlatStreamingSpliterator<S extends StreamSupplier<?>> extends Abstr
 
     private final Set<S> streamedAlready;
 
+    /**
+     * Instantiates a new Flat streaming spliterator.
+     *
+     * @param strategy  the strategy
+     * @param streamers the streamers
+     */
     public FlatStreamingSpliterator(
         final FlatStreamingStrategy strategy,
         final Stream<S> streamers) {
         this(strategy, streamers, StreamSupplier::stream);
     }
 
+    /**
+     * Instantiates a new Flat streaming spliterator.
+     *
+     * @param strategy              the strategy
+     * @param streamers             the streamers
+     * @param streamSupplierHandler the stream supplier handler
+     */
     public FlatStreamingSpliterator(
         final FlatStreamingStrategy strategy,
         final Stream<S> streamers,
@@ -87,25 +102,35 @@ public class FlatStreamingSpliterator<S extends StreamSupplier<?>> extends Abstr
         return true;
     }
 
+    /**
+     * Sets a stream supplier as streamed.
+     *
+     * @param streamer the stream supplier to set as streamed
+     */
     protected void setStreamed(final S streamer) {
         streamedAlready.add(streamer);
     }
 
+    /**
+     * Check if a stream supplier is streamed.
+     *
+     * @param streamer the stream supplier to check
+     * @return true if the given stream supplier is already streamed, false otherwise
+     */
     protected boolean isStreamed(final S streamer) {
         return streamedAlready.contains(streamer);
     }
 
+    /**
+     * Push a stream of stream suppliers to the queue.
+     *
+     * @param stream the stream of stream suppliers
+     */
     protected void pushInQueue(Stream<? extends S> stream) {
         if (streamersQueue instanceof Deque<S> deque) {
-            reverse(stream).forEach(deque::push);
+            reverseStream(stream).forEach(deque::push);
         } else {
             stream.forEach(streamersQueue::add);
         }
-    }
-
-    protected Stream<? extends S> reverse(Stream<? extends S> stream) {
-        List<? extends S> streamersList = stream.collect(toList());
-        Collections.reverse(streamersList);
-        return streamersList.stream();
     }
 }

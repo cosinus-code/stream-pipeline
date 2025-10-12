@@ -17,12 +17,22 @@ package org.cosinus.stream.consumer;
 
 import java.io.*;
 
+/**
+ * An output stream implementation to write in a file using a temporary file.
+ */
 public class TemporaryFileOutputStream extends FilterOutputStream {
 
     private final File file;
 
     private final File tempFile;
 
+    /**
+     * Instantiates a new temporary file output stream.
+     *
+     * @param file                  the target file
+     * @param temporaryFileStrategy the temporary file strategy
+     * @throws FileNotFoundException if the temporary file cannot be found
+     */
     public TemporaryFileOutputStream(final File file, final TemporaryFileStrategy temporaryFileStrategy)
         throws FileNotFoundException {
 
@@ -31,6 +41,12 @@ public class TemporaryFileOutputStream extends FilterOutputStream {
         this.tempFile = temporaryFileStrategy.getFile(file);
     }
 
+    /**
+     * Replace the target file with the temporary file if writing was successful.
+     *
+     * @param failed true if writing to the output stream was failed
+     * @throws IOException if the replacement failed
+     */
     public void afterClose(boolean failed) throws IOException {
         if (!failed && !(file.delete() && tempFile.renameTo(file))) {
             throw new IOException("Failed to finalize save for: " + file);

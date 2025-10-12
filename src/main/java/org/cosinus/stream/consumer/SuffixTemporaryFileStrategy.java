@@ -17,6 +17,11 @@ package org.cosinus.stream.consumer;
 
 import java.io.File;
 
+/**
+ * The temporary file strategy using a suffix.
+ *
+ * @param suffix the suffix to use for temporary files
+ */
 public record SuffixTemporaryFileStrategy(String suffix) implements TemporaryFileStrategy {
 
     public static final TemporaryFileStrategy PART_TEMPORARY_FILE = new SuffixTemporaryFileStrategy(".part");

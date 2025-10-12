@@ -28,6 +28,9 @@ import java.util.Optional;
 
 import static java.lang.String.format;
 
+/**
+ * Interface for a pipeline which processes binary data.
+ */
 public interface BinaryPipeline extends Pipeline<byte[], BinaryStream, BinaryStreamConsumer, BinaryPipelineStrategy> {
 
     @Override
@@ -79,9 +82,25 @@ public interface BinaryPipeline extends Pipeline<byte[], BinaryStream, BinaryStr
         }
     }
 
+    /**
+     * Get the input stream.
+     *
+     * @return the input stream
+     */
     InputStream inputStream();
 
+    /**
+     * Get the output stream.
+     *
+     * @param append true if streamed data should be appended to existing data
+     * @return the output stream
+     */
     OutputStream outputStream(boolean append);
 
+    /**
+     * Get the pipeline output size (which would the pipeline debit measurement).
+     *
+     * @return the output size
+     */
     long outputSize();
 }

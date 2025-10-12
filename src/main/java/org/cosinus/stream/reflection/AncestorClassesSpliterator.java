@@ -31,10 +31,18 @@ import static java.lang.Long.MAX_VALUE;
 import static java.util.Arrays.stream;
 import static java.util.stream.Stream.concat;
 
+/**
+ * A spliterator for streaming all ancestor classes and interfaces of a given object.
+ */
 public class AncestorClassesSpliterator extends AbstractSpliterator<ClassDescriptor<?>> {
 
     private final Queue<ClassDescriptor<?>> typesQueue;
 
+    /**
+     * Instantiates a new AncestorClassesSpliterator.
+     *
+     * @param object the object to analyze
+     */
     public AncestorClassesSpliterator(final Object object) {
         super(MAX_VALUE, ORDERED | NONNULL);
 

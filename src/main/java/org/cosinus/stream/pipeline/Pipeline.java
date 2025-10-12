@@ -16,8 +16,8 @@
 
 package org.cosinus.stream.pipeline;
 
-import org.cosinus.stream.error.SkipPipelineConsumeException;
 import org.cosinus.stream.consumer.StreamConsumer;
+import org.cosinus.stream.error.SkipPipelineConsumeException;
 
 import java.io.IOException;
 import java.util.function.Supplier;
@@ -29,20 +29,47 @@ import static java.util.Optional.ofNullable;
  * Pipeline interface.
  *
  * @param <D> the type of data consumed through the pipeline
- * @param <I> the type of input stream
- * @param <O> the type of output stream consumer
+ * @param <I> the type of input stream to the pipeline
+ * @param <O> the type of output stream consumer from the pipeline
  * @param <S> the type of stream pipeline strategy
  */
 public interface Pipeline<D, I extends Stream<D>, O extends StreamConsumer<D>, S extends PipelineStrategy> {
 
+    /**
+     * Open pipeline input.
+     *
+     * @param pipelineStrategy the pipeline strategy
+     * @return the input stream
+     */
     I openPipelineInputStream(S pipelineStrategy);
 
+    /**
+     * Open the pipeline output.
+     *
+     * @param pipelineStrategy the pipeline strategy
+     * @return the stream consumer
+     */
     O openPipelineOutputStream(S pipelineStrategy);
 
+    /**
+     * Gets pipeline strategy.
+     *
+     * @return the pipeline strategy
+     */
     S getPipelineStrategy();
 
+    /**
+     * Gets pipeline listener.
+     *
+     * @return the pipeline listener
+     */
     PipelineListener<D> getPipelineListener();
 
+    /**
+     * Open the pipeline.
+     *
+     * @throws IOException the io exception
+     */
     default void openPipeline() throws IOException {
         S pipelineStrategy = getPipelineStrategy();
         PipelineListener<D> pipelineListener = ofNullable(getPipelineListener())
@@ -83,18 +110,41 @@ public interface Pipeline<D, I extends Stream<D>, O extends StreamConsumer<D>, S
         }
     }
 
+    /**
+     * Prepare the pipeline for opening.
+     *
+     * @param pipelineStrategy the pipeline strategy
+     * @param pipelineListener the pipeline listener
+     */
     default void preparePipelineOpen(S pipelineStrategy, PipelineListener<D> pipelineListener) {
     }
 
+    /**
+     * Prepare the pipeline for consumption.
+     *
+     * @param pipelineInputStream  the pipeline input stream
+     * @param pipelineOutputStream the pipeline output stream
+     * @param pipelineStrategy     the pipeline strategy
+     * @param pipelineListener     the pipeline listener
+     * @throws IOException the io exception
+     */
     default void preparePipelineConsume(I pipelineInputStream,
                                         O pipelineOutputStream,
                                         S pipelineStrategy,
-                                        PipelineListener<D> listener) throws IOException {
+                                        PipelineListener<D> pipelineListener) throws IOException {
     }
 
+    /**
+     * Check the pipeline for consumption.
+     *
+     * @param pipelineInputStream  the pipeline input stream
+     * @param pipelineOutputStream the pipeline output stream
+     * @param pipelineStrategy     the pipeline strategy
+     * @param pipelineListener     the pipeline listener
+     */
     default void checkPipelineConsume(I pipelineInputStream,
                                       O pipelineOutputStream,
                                       S pipelineStrategy,
-                                      PipelineListener<D> listener) {
+                                      PipelineListener<D> pipelineListener) {
     }
 }

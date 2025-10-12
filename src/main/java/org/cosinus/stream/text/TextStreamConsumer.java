@@ -19,10 +19,18 @@ import org.cosinus.stream.consumer.StreamConsumer;
 
 import java.io.*;
 
+/**
+ * The text stream consumer.
+ */
 public class TextStreamConsumer implements StreamConsumer<String>
 {
     private final Writer writer;
 
+    /**
+     * Instantiates a new TextStreamConsumer.
+     *
+     * @param outputStream the output stream
+     */
     public TextStreamConsumer(OutputStream outputStream) {
         this.writer = new BufferedWriter(new OutputStreamWriter(outputStream));
     }

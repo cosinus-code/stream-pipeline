@@ -16,32 +16,74 @@
 
 package org.cosinus.stream.pipeline;
 
+/**
+ * The pipeline listener.
+ *
+ * @param <D> the type of streamd data
+ */
 public interface PipelineListener<D> {
 
+    /**
+     * On preparing pipeline.
+     *
+     * @param preparedDataSize the prepared data size
+     */
     default void onPreparingPipeline(long preparedDataSize) {
     }
 
+    /**
+     * Before pipeline open.
+     */
     default void beforePipelineOpen() {
     }
 
+    /**
+     * After pipeline open.
+     */
     default void afterPipelineOpen() {
     }
 
+    /**
+     * Before pipeline data consume.
+     *
+     * @param data the data
+     */
     default void beforePipelineDataConsume(D data) {
     }
 
+    /**
+     * After pipeline data consume.
+     *
+     * @param data the data
+     */
     default void afterPipelineDataConsume(D data) {
     }
 
+    /**
+     * After pipeline data skip.
+     *
+     * @param skippedDataSize the skipped data size
+     */
     default void afterPipelineDataSkip(long skippedDataSize) {
     }
 
+    /**
+     * Before pipeline close.
+     */
     default void beforePipelineClose() {
     }
 
+    /**
+     * After pipeline close.
+     *
+     * @param pipelineFailed the pipeline failed
+     */
     default void afterPipelineClose(boolean pipelineFailed) {
     }
 
+    /**
+     * On pipeline fail.
+     */
     default void onPipelineFail() {
     }
 }

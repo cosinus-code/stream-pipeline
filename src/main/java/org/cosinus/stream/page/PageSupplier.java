@@ -19,8 +19,20 @@ package org.cosinus.stream.page;
 
 import java.util.List;
 
+/**
+ * The interface for a page supplier.
+ *
+ * @param <T> the type of paged items
+ */
 @FunctionalInterface
 public interface PageSupplier<T> {
 
-    List<T> call(int pageSize, int page);
+    /**
+     * Gets the page of items corresponding to the given page size and page number.
+     *
+     * @param pageSize   the page size
+     * @param pageNumber the page number
+     * @return the list of items of the page
+     */
+    List<T> getPage(int pageSize, int pageNumber);
 }

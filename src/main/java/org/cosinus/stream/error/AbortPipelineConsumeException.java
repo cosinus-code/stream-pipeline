@@ -17,8 +17,16 @@
 
 package org.cosinus.stream.error;
 
+/**
+ * The exception thrown when pipeline consumption is aborted.
+ */
 public class AbortPipelineConsumeException extends RuntimeException {
 
+    /**
+     * Instantiates a new AbortPipelineConsumeException.
+     *
+     * @param message the error message
+     */
     public AbortPipelineConsumeException(String message) {
         super(message);
     }

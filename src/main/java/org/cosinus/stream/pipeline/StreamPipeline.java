@@ -20,17 +20,20 @@ import org.cosinus.stream.consumer.StreamConsumer;
 
 import java.util.stream.Stream;
 
+/**
+ * Interface for a simple pipeline using no strategy and no listener.
+ *
+ * @param <T> the type streamed data
+ */
 public interface StreamPipeline<T> extends Pipeline<T, Stream<T>, StreamConsumer<T>, PipelineStrategy> {
 
     @Override
-    default PipelineStrategy getPipelineStrategy()
-    {
+    default PipelineStrategy getPipelineStrategy() {
         return new NoPipelineStrategy();
     }
 
     @Override
-    default PipelineListener<T> getPipelineListener()
-    {
+    default PipelineListener<T> getPipelineListener() {
         return null;
     }
 }

@@ -24,14 +24,17 @@ import java.util.function.Consumer;
 import static java.lang.Long.MAX_VALUE;
 
 /**
- * Generic {@link java.util.Spliterator} for streaming input streams as chunks of binary data.
- * <p>
- * The size of chunks is configurable in the constructor.
+ * spliterator for streaming input streams as lines of text.
  */
 public class TextSpliterator extends AbstractSpliterator<String> {
 
     private final BufferedReader reader;
 
+    /**
+     * Instantiates a new TextSpliterator.
+     *
+     * @param reader the text reader
+     */
     public TextSpliterator(final BufferedReader reader) {
         super(MAX_VALUE, ORDERED | NONNULL);
         this.reader = reader;

@@ -22,6 +22,14 @@ import java.util.function.Predicate;
 import static java.util.Optional.ofNullable;
 import static java.util.stream.IntStream.range;
 
+/**
+ * The {@link Predicate} to check if a {@link ClassDescriptor} is a parametrized class of a given class
+ * with given generics classes.
+ *
+ * @param parametrizedClass the parametrized class to check
+ * @param extending         if true, the generic classes can be subclasses of the given generic classes
+ * @param genericClasses    the generic classes to check
+ */
 public record ParametrizedTypeWithGenericsPredicate(Class<?> parametrizedClass,
                                                     boolean extending,
                                                     Class<?>... genericClasses)

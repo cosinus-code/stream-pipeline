@@ -15,6 +15,17 @@
  */
 package org.cosinus.stream.pipeline;
 
+/**
+ * The implementation of {@link PipelineStrategy} that does nothing.
+ *
+ */
 public class NoPipelineStrategy implements PipelineStrategy
 {
+    /**
+     * Instantiates a new NoPipelineStrategy.
+     */
+    public NoPipelineStrategy()
+    {
+        super();
+    }
 }

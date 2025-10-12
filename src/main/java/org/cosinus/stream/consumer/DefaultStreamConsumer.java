@@ -19,10 +19,23 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
 
+/**
+ * The default implementation of a stream consumer by writing to an output stream.
+ *
+ * @param <O> the type of the output stream to write to
+ */
 public class DefaultStreamConsumer<O extends OutputStream> implements StreamConsumer<OutputWriter<O>> {
 
+    /**
+     * The output stream to write to.
+     */
     protected final O outputStream;
 
+    /**
+     * Instantiates a new DefaultStreamConsumer.
+     *
+     * @param outputStream the output stream
+     */
     public DefaultStreamConsumer(O outputStream) {
         this.outputStream = outputStream;
     }
