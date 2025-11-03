@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 import static java.lang.Long.MAX_VALUE;
 import static java.util.Arrays.stream;
 import static java.util.stream.Stream.concat;
+import static java.util.stream.Stream.ofNullable;
 
 /**
  * A spliterator for streaming all ancestor classes and interfaces of a given object.
@@ -83,7 +84,10 @@ public class AncestorClassesSpliterator extends AbstractSpliterator<ClassDescrip
                             (Class<?>) genericParameterizedType.getRawType() :
                             //TODO: to find a better solution to find the right generic class
                             //finding by index is not correct in all cases
-                            genericClasses[genericIndex.getAndIncrement()])
+                            genericClasses != null && genericClasses.length > genericIndex.get() ?
+                                genericClasses[genericIndex.getAndIncrement()] :
+                                null)
+                    .filter(Objects::nonNull)
                 .toArray(Class<?>[]::new));
         }
 
