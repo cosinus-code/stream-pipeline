@@ -16,10 +16,11 @@
 
 package org.cosinus.stream.consumer;
 
+import org.cosinus.stream.error.SkipPipelineConsumeException;
+
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.util.Optional.ofNullable;
@@ -53,7 +54,7 @@ public interface StreamConsumer<T> extends Consumer<T>, AutoCloseable {
      * @param before the before an action to perform before consuming an item
      * @param after  the after an action to perform after consuming an item
      */
-    default void consume(Stream<T> stream, Supplier<Boolean> retry, Consumer<T> before, Consumer<T> after) {
+    default void consume(Stream<T> stream, Function<Exception, Boolean> retry, Consumer<T> before, Consumer<T> after) {
         stream.forEach(data -> {
             apply(data, before);
             acceptWithRetry(data, retry, 0, getRetryMaxAttempts());
@@ -62,11 +63,13 @@ public interface StreamConsumer<T> extends Consumer<T>, AutoCloseable {
 
     }
 
-    private void acceptWithRetry(T data, Supplier<Boolean> retry, int retryCount, int retryMaxAttempts) {
+    private void acceptWithRetry(T data, Function<Exception, Boolean> retry, int retryCount, int retryMaxAttempts) {
         try {
             accept(data);
-        } catch (UncheckedIOException ex) {
-            if (retryCount < retryMaxAttempts && retry != null && retry.get()) {
+        } catch (SkipPipelineConsumeException skipPipelineConsumeException) {
+            throw skipPipelineConsumeException;
+        } catch (Exception ex) {
+            if (retryCount < retryMaxAttempts && retry != null && retry.apply(ex)) {
                 acceptWithRetry(data, retry, ++retryCount, retryMaxAttempts);
             } else {
                 throw ex;

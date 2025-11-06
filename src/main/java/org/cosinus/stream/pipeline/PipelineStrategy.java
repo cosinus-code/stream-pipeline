@@ -16,17 +16,10 @@
 
 package org.cosinus.stream.pipeline;
 
+import org.cosinus.stream.StreamingStrategy;
+
 /**
  * The pipeline strategy.
  */
-public interface PipelineStrategy {
-
-    /**
-     * Should retry on pipeline failure.
-     *
-     * @return true if the pipeline should be retried on failure, false otherwise
-     */
-    default boolean shouldRetryOnFail() {
-        return false;
-    }
+public interface PipelineStrategy extends StreamingStrategy {
 }
