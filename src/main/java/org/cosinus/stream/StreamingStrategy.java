@@ -17,8 +17,14 @@
 
 package org.cosinus.stream;
 
+/**
+ * Streaming strategy
+ */
 public interface StreamingStrategy {
 
+    /**
+     * No strategy constant
+     */
     StreamingStrategy NO_STRATEGY = new StreamingStrategy() {};
 
     /**

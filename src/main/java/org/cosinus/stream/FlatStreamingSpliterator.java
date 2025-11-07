@@ -20,7 +20,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.cosinus.stream.error.SkipPipelineConsumeException;
 
-import java.util.*;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.Queue;
+import java.util.Set;
 import java.util.Spliterators.AbstractSpliterator;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -29,9 +32,9 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.lang.Long.MAX_VALUE;
+import static org.cosinus.stream.Streams.reverseStream;
 import static org.cosinus.stream.reflection.ParametrizedClassPredicate.isParametrizedClass;
 import static org.cosinus.stream.reflection.ReflectionStream.ancestorStream;
-import static org.cosinus.stream.Streams.reverseStream;
 
 /**
  * Spliterator for flattening a tree of streams
@@ -53,10 +56,11 @@ public class FlatStreamingSpliterator<S extends StreamSupplier<?>> extends Abstr
     private final Set<S> streamedAlready;
 
     /**
-     * Instantiates a new Flat streaming spliterator.
+     * Constructor.
      *
-     * @param flatStreamingStrategy  the strategy
-     * @param streams the streamers
+     * @param flatStreamingStrategy flat streaming strategy
+     * @param streamingStrategy     the streaming strategy
+     * @param streams               the streams
      */
     public FlatStreamingSpliterator(
         final FlatStreamingStrategy flatStreamingStrategy,
@@ -68,7 +72,8 @@ public class FlatStreamingSpliterator<S extends StreamSupplier<?>> extends Abstr
     /**
      * Instantiates a new Flat streaming spliterator.
      *
-     * @param flatStreamingStrategy              the strategy
+     * @param flatStreamingStrategy the strategy
+     * @param streamingStrategy     the streaming strategy
      * @param streamers             the streamers
      * @param streamSupplierHandler the stream supplier handler
      */
@@ -117,10 +122,23 @@ public class FlatStreamingSpliterator<S extends StreamSupplier<?>> extends Abstr
         return true;
     }
 
+    /**
+     * Get stream from supplier.
+     *
+     * @param streamSupplier the stream supplier
+     * @return the supplied stream
+     */
     protected Stream<? extends S> getStream(StreamSupplier<S> streamSupplier) {
         return getStream(streamSupplier, 0);
     }
 
+    /**
+     * Get stream from supplier.
+     *
+     * @param streamSupplier the stream supplier
+     * @param retryCount     the current retry count
+     * @return the supplied stream
+     */
     protected Stream<? extends S> getStream(StreamSupplier<S> streamSupplier, int retryCount) {
         try {
             return streamSupplierHandler.apply(streamSupplier);
