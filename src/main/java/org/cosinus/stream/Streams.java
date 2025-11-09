@@ -19,6 +19,7 @@ package org.cosinus.stream;
 import org.cosinus.stream.page.PageSupplier;
 import org.cosinus.stream.page.PagedSpliterator;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
@@ -26,6 +27,7 @@ import java.util.stream.StreamSupport;
 
 import static java.util.Collections.reverse;
 import static java.util.stream.Collectors.toList;
+import static org.cosinus.stream.StreamingStrategy.NO_STRATEGY;
 
 /**
  * Streams utils
@@ -78,6 +80,23 @@ public final class Streams {
         List<T> list = stream.collect(toList());
         reverse(list);
         return list.stream();
+    }
+
+    public static <T extends StreamSupplier<?>> Stream<T> flatStream(final FlatStreamingStrategy flatStreamingStrategy,
+                                                                     final T... streamSuppliers) {
+        return flatStream(flatStreamingStrategy, Arrays.stream(streamSuppliers));
+    }
+
+    public static <T extends StreamSupplier<?>> Stream<T> flatStream(final FlatStreamingStrategy flatStreamingStrategy,
+                                                                     final Stream<T> streams) {
+        return flatStream(flatStreamingStrategy, NO_STRATEGY, streams);
+    }
+
+    public static <T extends StreamSupplier<?>> Stream<T> flatStream(final FlatStreamingStrategy flatStreamingStrategy,
+                                                                     final StreamingStrategy streamingStrategy,
+                                                                     final Stream<T> streams) {
+        return StreamSupport.stream(
+            new FlatStreamingSpliterator<>(flatStreamingStrategy, streamingStrategy, streams), false);
     }
 
     /**
