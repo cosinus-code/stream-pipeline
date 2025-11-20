@@ -18,7 +18,9 @@ package org.cosinus.stream;
 
 import org.cosinus.stream.page.PageSupplier;
 import org.cosinus.stream.page.PagedSpliterator;
+import org.cosinus.stream.swing.FlatSwingComponentsSpliterator;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -97,6 +99,10 @@ public final class Streams {
                                                                      final Stream<T> streams) {
         return StreamSupport.stream(
             new FlatStreamingSpliterator<>(flatStreamingStrategy, streamingStrategy, streams), false);
+    }
+
+    public static Stream<Component> flatComponentsStream(Container container) {
+        return StreamSupport.stream(new FlatSwingComponentsSpliterator(container), false);
     }
 
     /**
