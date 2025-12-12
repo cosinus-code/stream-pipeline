@@ -19,6 +19,7 @@ package org.cosinus.stream.swing;
 
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.Queue;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -60,14 +61,16 @@ public class FlatSwingComponentsSpliterator extends Spliterators.AbstractSpliter
     }
 
     protected void expandContainerIntoQueue(final Container container) {
-        concat(stream(
-            container.getComponents()),
+        List<Component> components = concat(
+            stream(container.getComponents()),
             container instanceof ExtendedContainer extendedContainer ?
                 extendedContainer.streamAdditionalContainers() :
                 Stream.empty())
             .filter(Objects::nonNull)
             .filter(component -> !expandedComponents.contains(component))
-            .forEach(componentsQueue::add);
-        expandedComponents.addAll(Set.of(container.getComponents()));
+            .toList();
+
+        componentsQueue.addAll(components);
+        expandedComponents.addAll(components);
     }
 }
