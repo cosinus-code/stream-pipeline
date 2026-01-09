@@ -24,14 +24,6 @@ package org.cosinus.stream.pipeline;
 public interface PipelineListener<D> {
 
     /**
-     * On preparing pipeline.
-     *
-     * @param preparedDataSize the prepared data size
-     */
-    default void onPreparingPipeline(long preparedDataSize) {
-    }
-
-    /**
      * Before pipeline open.
      */
     default void beforePipelineOpen() {

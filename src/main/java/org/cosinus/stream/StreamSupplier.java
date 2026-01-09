@@ -24,6 +24,7 @@ import java.util.stream.Stream;
  *
  * @param <T> the type of the streamed items
  */
+@FunctionalInterface
 public interface StreamSupplier<T> {
 
     /**
