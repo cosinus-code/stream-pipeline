@@ -32,6 +32,13 @@ public class SkipPipelineConsumeException extends RuntimeException {
 
     /**
      * Instantiates a new SkipPipelineConsumeException.
+     */
+    public SkipPipelineConsumeException() {
+        this(1);
+    }
+
+    /**
+     * Instantiates a new SkipPipelineConsumeException.
      *
      * @param skippedSize the skipped size
      */

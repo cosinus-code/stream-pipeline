@@ -43,7 +43,7 @@ public interface StreamConsumer<T> extends Consumer<T>, AutoCloseable {
      * @param stream the stream to consume
      */
     default void consume(Stream<T> stream) {
-        consume(stream, null, null, null);
+        consume(stream, null, null, null, null);
     }
 
     /**
@@ -54,30 +54,41 @@ public interface StreamConsumer<T> extends Consumer<T>, AutoCloseable {
      * @param before the before an action to perform before consuming an item
      * @param after  the after an action to perform after consuming an item
      */
-    default void consume(Stream<T> stream, Function<Exception, Boolean> retry, Consumer<T> before, Consumer<T> after) {
+    default void consume(final Stream<T> stream,
+                         final Function<Exception, Boolean> retry,
+                         final Consumer<T> before,
+                         final Consumer<T> after,
+                         final Consumer<Long> skip) {
         stream.forEach(data -> {
-            apply(data, before);
-            acceptWithRetry(data, retry, 0, getRetryMaxAttempts());
-            apply(data, after);
+            apply(before, data);
+            try {
+                acceptWithRetry(data, retry, 0, getRetryMaxAttempts());
+            } catch (SkipPipelineConsumeException skipPipelineConsumeException) {
+                apply(skip, skipPipelineConsumeException.getSkippedSize());
+            }
+            apply(after, data);
         });
 
     }
 
-    private void acceptWithRetry(T data, Function<Exception, Boolean> retry, int retryCount, int retryMaxAttempts) {
+    private void acceptWithRetry(final T data,
+                                 final Function<Exception, Boolean> retry,
+                                 final int retryCount,
+                                 final int retryMaxAttempts) {
         try {
             accept(data);
         } catch (SkipPipelineConsumeException skipPipelineConsumeException) {
             throw skipPipelineConsumeException;
         } catch (Exception ex) {
             if (retryCount < retryMaxAttempts && retry != null && retry.apply(ex)) {
-                acceptWithRetry(data, retry, ++retryCount, retryMaxAttempts);
+                acceptWithRetry(data, retry, retryCount + 1, retryMaxAttempts);
             } else {
                 throw ex;
             }
         }
     }
 
-    private void apply(T data, Consumer<T> consumer) {
+    private <V> void apply(final Consumer<V> consumer, final V data) {
         ofNullable(consumer).ifPresent(c -> c.accept(data));
     }
 

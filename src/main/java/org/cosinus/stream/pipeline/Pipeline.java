@@ -96,7 +96,8 @@ public interface Pipeline<D, I extends Stream<D>, O extends StreamConsumer<D>, S
                     .map(strategy -> (Function<Exception, Boolean>) strategy::shouldRetryOnFail)
                     .orElse(null),
                 pipelineListener::beforePipelineDataConsume,
-                pipelineListener::afterPipelineDataConsume);
+                pipelineListener::afterPipelineDataConsume,
+                pipelineListener::afterPipelineDataSkip);
             checkPipelineConsume(pipelineInputStream, pipelineOutputStream, pipelineStrategy, pipelineListener);
             pipelineListener.beforePipelineClose();
         } catch (SkipPipelineConsumeException ex) {
