@@ -42,7 +42,6 @@ public class FlatSwingComponentsSpliterator extends Spliterators.AbstractSpliter
             componentsQueue.add(component);
             expandedComponents.add(component);
         }
-        expandContainerIntoQueue(container);
     }
 
     @Override
