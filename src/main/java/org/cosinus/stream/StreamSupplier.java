@@ -34,4 +34,8 @@ public interface StreamSupplier<T> {
      */
     Stream<T> stream();
 
+    default boolean isParent() {
+        return true;
+    }
+
 }

@@ -20,21 +20,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.cosinus.stream.error.SkipPipelineConsumeException;
 
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.Spliterators.AbstractSpliterator;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.lang.Long.MAX_VALUE;
 import static org.cosinus.stream.Streams.reverseStream;
-import static org.cosinus.stream.reflection.ParametrizedClassPredicate.isParametrizedClass;
-import static org.cosinus.stream.reflection.ReflectionStream.ancestorStream;
 
 /**
  * Spliterator for flattening a tree of streams
@@ -86,9 +79,7 @@ public class FlatStreamingSpliterator<S extends StreamSupplier<?>> extends Abstr
         super(MAX_VALUE, ORDERED | NONNULL);
         this.flatStreamingStrategy = flatStreamingStrategy;
         this.streamingStrategy = streamingStrategy;
-        this.streamersQueue = flatStreamingStrategy.isDepthFirst() ?
-            new ConcurrentLinkedDeque<>() :
-            new ConcurrentLinkedQueue<>();
+        this.streamersQueue = new ArrayDeque<>();
         this.streamSupplierHandler = streamSupplierHandler;
         this.streamedAlready = new HashSet<>();
         streamers.forEach(this.streamersQueue::add);
@@ -101,10 +92,7 @@ public class FlatStreamingSpliterator<S extends StreamSupplier<?>> extends Abstr
             return false;
         }
 
-        boolean isMetaStreamSupplier = ancestorStream(streamSupplier)
-            .anyMatch(isParametrizedClass(StreamSupplier.class)
-                .withGenericsExtending(StreamSupplier.class));
-
+        boolean isMetaStreamSupplier = streamSupplier.isParent();
         boolean isMetaStreamSupplierButNotYetStreamed = isMetaStreamSupplier && !isStreamed(streamSupplier);
         if (flatStreamingStrategy.isParentFirst() || !isMetaStreamSupplierButNotYetStreamed) {
             action.accept(streamersQueue.poll());
@@ -181,7 +169,7 @@ public class FlatStreamingSpliterator<S extends StreamSupplier<?>> extends Abstr
      * @param stream the stream of stream suppliers
      */
     protected void pushInQueue(Stream<? extends S> stream) {
-        if (streamersQueue instanceof Deque<S> deque) {
+        if (flatStreamingStrategy.isDepthFirst() && streamersQueue instanceof Deque<S> deque) {
             reverseStream(stream).forEach(deque::push);
         } else {
             stream.forEach(streamersQueue::add);

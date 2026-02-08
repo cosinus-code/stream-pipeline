@@ -56,4 +56,9 @@ public class JsonStreamSupplier implements StreamSupplier<JsonStreamSupplier> {
             .stream()
             .flatMap(Collection::stream);
     }
+
+    @Override
+    public boolean isParent() {
+        return true;
+    }
 }
