@@ -48,7 +48,7 @@ public class TemporaryFileOutputStream extends FilterOutputStream {
      * @throws IOException if the replacement failed
      */
     public void afterClose(boolean failed) throws IOException {
-        if (!failed && !(file.delete() && tempFile.renameTo(file))) {
+        if (!failed && !(tempFile.exists() && file.delete() && tempFile.renameTo(file))) {
             throw new IOException("Failed to finalize save for: " + file);
         }
     }
