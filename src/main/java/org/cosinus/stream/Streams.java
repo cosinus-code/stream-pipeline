@@ -67,8 +67,19 @@ public final class Streams {
      * @param pageSupplier the page supplier
      * @return the paged stream
      */
-    public static <T> Stream<T> pagedStream(PageSupplier<T> pageSupplier) {
+    public static <T> Stream<T> pagedStream(final PageSupplier<T> pageSupplier) {
         return StreamSupport.stream(new PagedSpliterator<>(pageSupplier), false);
+    }
+
+    /**
+     * Get the pages stream using a given page supplier.
+     *
+     * @param <T>          the type of the streamed items
+     * @param pageSupplier the page supplier
+     * @return the paged stream
+     */
+    public static <T> Stream<T> pagedStream(final PageSupplier<T> pageSupplier, final int pageSize) {
+        return StreamSupport.stream(new PagedSpliterator<>(pageSupplier, pageSize), false);
     }
 
     /**

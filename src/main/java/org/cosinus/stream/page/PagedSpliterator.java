@@ -37,11 +37,13 @@ public class PagedSpliterator<T> extends AbstractSpliterator<T> {
 
     private final PageSupplier<T> pageSupplier;
 
-    private final Queue<T> activities;
+    private final Queue<T> items;
 
     private final int pageSize;
 
-    private int page = 1;
+    private int pageNumber = 1;
+
+    private String pageToken;
 
     /**
      * Instantiates a new PagedSpliterator.
@@ -63,20 +65,20 @@ public class PagedSpliterator<T> extends AbstractSpliterator<T> {
 
         this.pageSupplier = pageSupplier;
         this.pageSize = pageSize;
-        this.activities = new LinkedList<>();
+        this.items = new LinkedList<>();
     }
 
     @Override
     public boolean tryAdvance(final Consumer<? super T> action) {
-        if (activities.isEmpty()) {
-            activities.addAll(getNextPage());
+        if (items.isEmpty()) {
+            items.addAll(getNextPage());
         }
 
-        if (activities.isEmpty()) {
+        if (items.isEmpty()) {
             return false;
         }
 
-        action.accept(activities.poll());
+        action.accept(items.poll());
         return true;
     }
 
@@ -86,7 +88,13 @@ public class PagedSpliterator<T> extends AbstractSpliterator<T> {
      * @return the next page of items
      */
     protected List<T> getNextPage() {
-        return pageSupplier.getPage(getPageSize(), page++);
+        Page<T> page = pageSupplier.getPage(Pageable.builder()
+            .pageSize(getPageSize())
+            .pageNumber(pageNumber++)
+            .pageToken(pageToken)
+            .build());
+        pageToken = page.getNextPageToken();
+        return page.getContent();
     }
 
     /**

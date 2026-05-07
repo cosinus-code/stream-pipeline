@@ -17,20 +17,22 @@
 
 package org.cosinus.stream.page;
 
-import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
 
-/**
- * The interface for a page supplier.
- *
- * @param <T> the type of paged items
- */
-@FunctionalInterface
-public interface PageSupplier<T> {
+@Getter
+@Builder
+public class Pageable {
 
-    /**
-     * Gets the page of items corresponding to the given page size and page number.
-     *
-     * @param pageable the page info
-     */
-    Page<T> getPage(Pageable pageable);
+    public static final String LAST_PAGE_TOKEN = "lastPageToken";
+
+    private int pageSize;
+
+    private int pageNumber;
+
+    private String pageToken;
+
+    public boolean isLastPage() {
+        return LAST_PAGE_TOKEN.equals(pageToken);
+    }
 }
