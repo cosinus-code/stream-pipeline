@@ -22,12 +22,15 @@ import org.cosinus.stream.swing.FlatSwingComponentsSpliterator;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 import static java.util.Collections.reverse;
+import static java.util.Spliterator.ORDERED;
+import static java.util.Spliterators.spliteratorUnknownSize;
 import static java.util.stream.Collectors.toList;
 import static org.cosinus.stream.StreamingStrategy.NO_STRATEGY;
 
@@ -114,6 +117,23 @@ public final class Streams {
 
     public static Stream<Component> flatComponentsStream(Container container) {
         return StreamSupport.stream(new FlatSwingComponentsSpliterator(container), false);
+    }
+
+    public static <T> Stream<T> stream(final Enumeration<T> enumeration) {
+        return StreamSupport.stream(spliteratorUnknownSize(
+            new Iterator<>() {
+
+                @Override
+                public T next() {
+                    return enumeration.nextElement();
+                }
+
+                @Override
+                public boolean hasNext() {
+                    return enumeration.hasMoreElements();
+                }
+            },
+            ORDERED), false);
     }
 
     /**
