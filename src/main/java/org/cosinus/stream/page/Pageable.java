@@ -17,13 +17,21 @@
 
 package org.cosinus.stream.page;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * Pageable parameters.
+ */
 @Getter
 @Builder
+@AllArgsConstructor
 public class Pageable {
 
+    /**
+     * The page token indicating that there are no more pages to fetch.
+     */
     public static final String LAST_PAGE_TOKEN = "lastPageToken";
 
     private int pageSize;
@@ -32,6 +40,11 @@ public class Pageable {
 
     private String pageToken;
 
+    /**
+     * Checks if this is the last page.
+     *
+     * @return true if this is the last page, false otherwise
+     */
     public boolean isLastPage() {
         return LAST_PAGE_TOKEN.equals(pageToken);
     }

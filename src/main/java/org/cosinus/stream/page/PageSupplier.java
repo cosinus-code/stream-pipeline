@@ -17,8 +17,6 @@
 
 package org.cosinus.stream.page;
 
-import java.util.List;
-
 /**
  * The interface for a page supplier.
  *
@@ -31,6 +29,7 @@ public interface PageSupplier<T> {
      * Gets the page of items corresponding to the given page size and page number.
      *
      * @param pageable the page info
+     * @return the page of items
      */
     Page<T> getPage(Pageable pageable);
 }

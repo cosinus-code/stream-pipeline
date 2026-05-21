@@ -56,7 +56,7 @@ public interface BinaryPipelineStrategy extends PipelineStrategy {
     }
 
     /**
-     * Ask if the pipeline output should be resumed if the exising data matches the beginning of the input data.
+     * Ask if the pipeline output should be resumed if the existing data matches the beginning of the input data.
      *
      * @return tree if the pipeline output should be resumed, false otherwise
      */

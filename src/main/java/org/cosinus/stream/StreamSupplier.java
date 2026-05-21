@@ -34,6 +34,11 @@ public interface StreamSupplier<T> {
      */
     Stream<T> stream();
 
+    /**
+     * Whether this supplier is a parent supplier
+     *
+     * @return true if this supplier is a parent supplier, false otherwise
+     */
     default boolean isParent() {
         return true;
     }

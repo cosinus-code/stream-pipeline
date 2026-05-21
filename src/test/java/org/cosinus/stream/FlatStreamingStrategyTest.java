@@ -37,7 +37,7 @@ public class FlatStreamingStrategyTest {
     /**
      * Test flat streaming using LEVEL_UP_BOTTOM strategy for traversing the streamers tree.
      *
-     * @throws IOException while reading the file with json streamers
+     * @throws IOException while reading the file with JSON streamers
      */
     @Test
     public void testFlatStreamingStrategyLevelUpBottomOrder() throws IOException {
@@ -57,7 +57,7 @@ public class FlatStreamingStrategyTest {
     /**
      * Test flat streaming using IN_DEPTH strategy for traversing the streamers tree.
      *
-     * @throws IOException while reading the file with json streamers
+     * @throws IOException while reading the file with JSON streamers
      */
     @Test
     public void testFlatStreamingStrategyInDepth() throws IOException {
@@ -77,7 +77,7 @@ public class FlatStreamingStrategyTest {
     /**
      * Test flat streaming using LEVEL_BOTTOM_UP strategy for traversing the streamers tree.
      *
-     * @throws IOException while reading the file with json streamers
+     * @throws IOException while reading the file with JSON streamers
      */
     @Test
     public void testFlatStreamingStrategyLevelBottomUp() throws IOException {

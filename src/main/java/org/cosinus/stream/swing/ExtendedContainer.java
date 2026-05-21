@@ -20,7 +20,15 @@ package org.cosinus.stream.swing;
 import java.awt.*;
 import java.util.stream.Stream;
 
+/**
+ * Interface for containers with additional sub-containers.
+ */
 public interface ExtendedContainer {
 
+    /**
+     * Stream of additional containers.
+     *
+     * @return the stream of additional containers
+     */
     Stream<Component> streamAdditionalContainers();
 }

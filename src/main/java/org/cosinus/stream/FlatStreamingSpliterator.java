@@ -99,6 +99,7 @@ public class FlatStreamingSpliterator<S extends StreamSupplier<?>> extends Abstr
         }
 
         if (isMetaStreamSupplierButNotYetStreamed) {
+            //noinspection unchecked
             try (Stream<? extends S> stream = getStream((StreamSupplier<S>) streamSupplier)) {
                 pushInQueue(stream);
             } catch (SkipPipelineConsumeException skipPipelineConsumeException) {

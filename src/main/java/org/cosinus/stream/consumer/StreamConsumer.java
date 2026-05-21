@@ -53,6 +53,7 @@ public interface StreamConsumer<T> extends Consumer<T>, AutoCloseable {
      * @param retry  the retry true is a retry should be attempted on failure
      * @param before the before an action to perform before consuming an item
      * @param after  the after an action to perform after consuming an item
+     * @param skip  the skip an action to perform after consuming an item
      */
     default void consume(final Stream<T> stream,
                          final Function<Exception, Boolean> retry,

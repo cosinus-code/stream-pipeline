@@ -29,7 +29,7 @@ import java.util.stream.Stream;
 import static java.util.Optional.ofNullable;
 
 /**
- * Json based implementation of {@link StreamSupplier} used for tests
+ * JSON based implementation of {@link StreamSupplier} used for tests
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -55,10 +55,5 @@ public class JsonStreamSupplier implements StreamSupplier<JsonStreamSupplier> {
         return ofNullable(children)
             .stream()
             .flatMap(Collection::stream);
-    }
-
-    @Override
-    public boolean isParent() {
-        return true;
     }
 }

@@ -17,6 +17,7 @@
 
 package org.cosinus.stream.page;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -26,20 +27,41 @@ import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;
 import static org.cosinus.stream.page.Pageable.LAST_PAGE_TOKEN;
 
+/**
+ * Page of items.
+ *
+ * @param <T> the type of items
+ */
 @Getter
 @Builder
+@AllArgsConstructor
 public class Page<T> {
 
     private List<T> content;
 
     private String nextPageToken;
 
+    /**
+     * Creates a page with the given content and no next page token.
+     *
+     * @param content the content of the page
+     * @param <T>     the type of items
+     * @return the page
+     */
     public static <T> Page<T> of(List<T> content) {
         return Page.<T>builder()
             .content(content)
             .build();
     }
 
+    /**
+     * Creates a page with the given content and next page token.
+     *
+     * @param content       the content of the page
+     * @param nextPageToken the next page token, or null if there is no next page
+     * @param <T>           the type of items
+     * @return the page
+     */
     public static <T> Page<T> of(List<T> content, String nextPageToken) {
         return Page.<T>builder()
             .content(content)
@@ -48,6 +70,12 @@ public class Page<T> {
             .build();
     }
 
+    /**
+     * Creates an empty page with no content and no next page token.
+     *
+     * @param <T> the type of items
+     * @return the empty page
+     */
     public static <T> Page<T> empty() {
         return Page.<T>builder()
             .content(emptyList())

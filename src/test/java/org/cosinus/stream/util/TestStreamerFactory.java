@@ -16,7 +16,7 @@
  */
 package org.cosinus.stream.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,10 +27,10 @@ import java.io.InputStream;
 public class TestStreamerFactory {
 
     /**
-     * Read json streamer from test file.
+     * Read JSON streamer from test file.
      *
      * @param testResourcePath the test file name
-     * @return the json streamer
+     * @return the JSON streamer
      * @throws IOException when cannot read the file
      */
     public static JsonStreamSupplier jsonStreamer(String testResourcePath) throws IOException

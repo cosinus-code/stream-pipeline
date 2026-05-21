@@ -75,10 +75,11 @@ public final class Streams {
     }
 
     /**
-     * Get the pages stream using a given page supplier.
+     * Get the pages stream using a given page supplier and page size.
      *
-     * @param <T>          the type of the streamed items
      * @param pageSupplier the page supplier
+     * @param pageSize the page size
+     * @param <T> the type of the streamed items
      * @return the paged stream
      */
     public static <T> Stream<T> pagedStream(final PageSupplier<T> pageSupplier, final int pageSize) {
@@ -98,16 +99,41 @@ public final class Streams {
         return list.stream();
     }
 
+    /**
+     * Get a flat stream from the given stream suppliers and flat streaming strategy.
+     *
+     * @param <T>                   the type of the streamed items
+     * @param flatStreamingStrategy the flat streaming strategy to use
+     * @param streamSuppliers       the stream suppliers to flatten
+     * @return the flat stream
+     */
     public static <T extends StreamSupplier<?>> Stream<T> flatStream(final FlatStreamingStrategy flatStreamingStrategy,
                                                                      final T... streamSuppliers) {
         return flatStream(flatStreamingStrategy, Arrays.stream(streamSuppliers));
     }
 
+    /**
+     * Get a flat stream from the given stream suppliers and flat streaming strategy.
+     *
+     * @param <T>                   the type of the streamed items
+     * @param flatStreamingStrategy the flat streaming strategy to use
+     * @param streams the stream suppliers to flatten
+     * @return the flat stream
+     */
     public static <T extends StreamSupplier<?>> Stream<T> flatStream(final FlatStreamingStrategy flatStreamingStrategy,
                                                                      final Stream<T> streams) {
         return flatStream(flatStreamingStrategy, NO_STRATEGY, streams);
     }
 
+    /**
+     * Get a flat stream from the given stream suppliers and flat streaming strategy.
+     *
+     * @param <T>                   the type of the streamed items
+     * @param flatStreamingStrategy the flat streaming strategy to use
+     * @param streamingStrategy     the streaming strategy to use for the inner streams
+     * @param streams the stream suppliers to flatten
+     * @return the flat stream
+     */
     public static <T extends StreamSupplier<?>> Stream<T> flatStream(final FlatStreamingStrategy flatStreamingStrategy,
                                                                      final StreamingStrategy streamingStrategy,
                                                                      final Stream<T> streams) {
@@ -115,10 +141,23 @@ public final class Streams {
             new FlatStreamingSpliterator<>(flatStreamingStrategy, streamingStrategy, streams), false);
     }
 
+    /**
+     * Get a flat stream of Swing components from the given container, including additional containers.
+     *
+     * @param container the container to traverse
+     * @return the flat stream of components
+     */
     public static Stream<Component> flatComponentsStream(Container container) {
         return StreamSupport.stream(new FlatSwingComponentsSpliterator(container), false);
     }
 
+    /**
+     * Get a stream from the given enumeration.
+     *
+     * @param <T>         the type of the streamed items
+     * @param enumeration the enumeration to stream
+     * @return the stream
+     */
     public static <T> Stream<T> stream(final Enumeration<T> enumeration) {
         return StreamSupport.stream(spliteratorUnknownSize(
             new Iterator<>() {

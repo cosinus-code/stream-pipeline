@@ -28,12 +28,20 @@ import static java.lang.Long.MAX_VALUE;
 import static java.util.Arrays.stream;
 import static java.util.stream.Stream.concat;
 
+/**
+ * Spliterator to traverse Swing components in a flat manner, including additional containers provided by {@link ExtendedContainer}.
+ */
 public class FlatSwingComponentsSpliterator extends Spliterators.AbstractSpliterator<Component> {
 
     private final Queue<Component> componentsQueue;
 
     private final Set<Component> expandedComponents;
 
+    /**
+     * Instantiates a new FlatSwingComponentsSpliterator with the given root container.
+     *
+     * @param container the container to start traversal from
+     */
     public FlatSwingComponentsSpliterator(final Container container) {
         super(MAX_VALUE, ORDERED | NONNULL);
         this.componentsQueue = new ArrayDeque<>();
@@ -59,6 +67,11 @@ public class FlatSwingComponentsSpliterator extends Spliterators.AbstractSpliter
         return true;
     }
 
+    /**
+     * Expands the given container by adding its components and additional containers to the queue.
+     *
+     * @param container the container to expand
+     */
     protected void expandContainerIntoQueue(final Container container) {
         List<Component> components = concat(
             stream(container.getComponents()),
